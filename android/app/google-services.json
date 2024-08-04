@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "279069685668",
+    "project_id": "raktoo-ed25c",
+    "storage_bucket": "raktoo-ed25c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279069685668:android:b23d60faded50ccd0ef331",
+        "android_client_info": {
+          "package_name": "com.ftrdesign.raktoo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTud8ICP4w8lsi0wMZiT5iEaxUvUJesEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
