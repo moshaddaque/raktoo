@@ -65,7 +65,8 @@ class MyCart extends StatelessWidget {
                               subtitle: Text('\$${product['price']}'),
                               trailing: Column(
                                 children: [
-                                  product['variant'] == null
+                                  product['variant'] == null ||
+                                          product['variant'] == ''
                                       ? const SizedBox()
                                       : Text('Size: ${product['variant']}'),
                                   Container(

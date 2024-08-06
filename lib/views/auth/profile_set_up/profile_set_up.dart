@@ -13,10 +13,7 @@ class ProfileSetUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(AuthController());
-    // final formKey = GlobalKey<FormState>();
-    // TextEditingController nameController = TextEditingController();
-    // TextEditingController addressController = TextEditingController();
-    // TextEditingController phoneNumController = TextEditingController();
+
     return Scaffold(
       appBar: const MyAppBar(),
       body: SafeArea(
@@ -143,6 +140,7 @@ class ProfileSetUp extends StatelessWidget {
                           isLoading: controller.isLoading.value,
                           titleColor: AppColor.whiteColor,
                           onTap: () {
+                            if (controller.isLoading.value == true) {}
                             if (controller.setupFormKey.currentState!
                                 .validate()) {
                               controller.profileSetUp();

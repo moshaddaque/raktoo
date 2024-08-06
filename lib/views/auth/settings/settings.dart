@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:raktoo/components/my_app_bar.dart';
 import 'package:raktoo/components/my_text_field.dart';
 import 'package:raktoo/components/settings_tile.dart';
+import 'package:raktoo/controller/auth_controller.dart';
 import 'package:raktoo/utils/app_style.dart';
 
 import '../../../components/my_button.dart';
@@ -12,6 +14,8 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(AuthController());
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: const MyAppBar(
         title: "Settings",
@@ -27,68 +31,95 @@ class Settings extends StatelessWidget {
                   onTap: () {
                     showModalBottomSheet(
                       context: context,
+                      isScrollControlled: true,
                       builder: (context) {
                         return SizedBox(
                           width: double.infinity,
                           height: 800,
                           child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    "Update Your Profile",
-                                    style: AppStyle.h4Text,
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  MyTextField(
-                                    hintText: "Full Name",
-                                    onChanged: (p0) {},
-                                    isObsecure: false,
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  MyTextField(
-                                    hintText: "Address",
-                                    onChanged: (value) {
-                                      // controller.address.value = value;
-                                    },
-                                    isObsecure: false,
-                                    isRequired: true,
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  MyTextField(
-                                    hintText: "Phone Number",
-                                    onChanged: (value) {
-                                      // controller.phoneNumber.value = value;
-                                    },
-                                    isObsecure: false,
-                                    isRequired: true,
-                                  ),
-                                  const SizedBox(
-                                    height: 30,
-                                  ),
-                                  MyButton(
-                                    backgroundColor: AppColor.primaryColor,
-                                    title: "Complete Setup",
-                                    isLoading: false,
-                                    titleColor: AppColor.whiteColor,
-                                    onTap: () {
-                                      // if (controller.setupFormKey.currentState!
-                                      //     .validate()) {
-                                      //   controller.profileSetUp();
-                                      // }
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                              padding: const EdgeInsets.all(15.0),
+                              child: Obx(
+                                () {
+                                  if (controller.user.value.email.isEmpty) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else {
+                                    return SingleChildScrollView(
+                                      child: Form(
+                                        key: _formKey,
+                                        child: Column(
+                                          children: [
+                                            const Text(
+                                              "Update Your Profile",
+                                              style: AppStyle.h4Text,
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            MyTextField(
+                                              initialText: controller
+                                                  .user.value.fullName,
+                                              hintText: "Full Name",
+                                              onChanged: (value) {
+                                                controller.user.value.fullName =
+                                                    value;
+                                              },
+                                              isObsecure: false,
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            MyTextField(
+                                              initialText:
+                                                  controller.user.value.address,
+                                              hintText: "Address",
+                                              onChanged: (value) {
+                                                controller.user.value.address =
+                                                    value;
+                                              },
+                                              isObsecure: false,
+                                              isRequired: true,
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            MyTextField(
+                                              initialText: controller
+                                                  .user.value.phoneNumber,
+                                              hintText: "Phone Number",
+                                              onChanged: (value) {
+                                                controller.user.value
+                                                    .phoneNumber = value;
+                                              },
+                                              isObsecure: false,
+                                              isRequired: true,
+                                            ),
+                                            const SizedBox(
+                                              height: 30,
+                                            ),
+                                            MyButton(
+                                              backgroundColor:
+                                                  AppColor.primaryColor,
+                                              title: "Update Profile",
+                                              isLoading:
+                                                  controller.isLoading.value,
+                                              titleColor: AppColor.whiteColor,
+                                              onTap: () {
+                                                if (_formKey.currentState!
+                                                    .validate()) {
+                                                  controller
+                                                      .updateProfileData();
+                                                }
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                              )),
                         );
                       },
                     );

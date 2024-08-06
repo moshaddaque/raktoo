@@ -6,6 +6,7 @@ class MyTextField extends StatelessWidget {
   final void Function(String)? onChanged;
   final bool isObsecure;
   final bool? isRequired;
+  final String? initialText;
 
   const MyTextField({
     super.key,
@@ -13,11 +14,13 @@ class MyTextField extends StatelessWidget {
     required this.onChanged,
     required this.isObsecure,
     this.isRequired,
+    this.initialText,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: initialText,
       validator: isRequired == true
           ? (String? value) {
               if (value == null || value.isEmpty) {

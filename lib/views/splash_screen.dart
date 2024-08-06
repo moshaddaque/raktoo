@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:raktoo/controller/auth_controller.dart';
 import 'package:raktoo/controller/home_controller.dart';
 import 'package:raktoo/utils/app_style.dart';
 import 'package:raktoo/utils/colors.dart';
@@ -22,6 +23,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final controller = Get.put(HomeController());
+  final authController = Get.put(AuthController());
   final user = FirebaseAuth.instance.currentUser;
 
   final Connectivity _connectivity = Connectivity();
@@ -31,6 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     // _connectivity.onConnectivityChanged.listen((e) => _updateConnectionStatus);
+    authController.getProfileData();
 
     subscription =
         InternetConnection().onStatusChange.listen((InternetStatus status) {

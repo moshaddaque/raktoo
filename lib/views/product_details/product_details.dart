@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:raktoo/components/my_app_bar.dart';
 import 'package:raktoo/controller/product_controller.dart';
 import 'package:raktoo/utils/app_style.dart';
-import 'package:raktoo/views/cart/my_cart.dart';
+import 'package:raktoo/views/home/home.dart';
 
 import '../../components/my_button.dart';
 import '../../models/products_model.dart';
@@ -205,7 +205,7 @@ class ProductDetails extends StatelessWidget {
               titleColor: AppColor.whiteColor,
               onTap: () {
                 controller.addToCart(product);
-                Get.to(() => const MyCart());
+                Get.to(() => const Home());
               },
             ),
           ),

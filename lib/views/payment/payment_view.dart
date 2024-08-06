@@ -21,7 +21,7 @@ class PaymentView extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     final controller = Get.put(OrderController());
     createOrder() async {
-      final userDetails = await await FirebaseFirestore.instance
+      final userDetails = await FirebaseFirestore.instance
           .collection('Users')
           .doc(user!.email)
           .get();
@@ -32,8 +32,10 @@ class PaymentView extends StatelessWidget {
         'phoneNumber': userDetails.data()!['phone_number'],
         'time': DateTime.now(),
         'items': cartData,
+        'totalAmount': totalAmount,
         'gateway_name': 'bKash',
         'trx_id': 'AUU&HB#&ds55',
+        'status': 'Pending',
       }).then((value) async {
         final cart = await FirebaseFirestore.instance
             .collection('Users')
@@ -49,14 +51,28 @@ class PaymentView extends StatelessWidget {
       });
     }
 
+    addToOrder() {
+      FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user!.email)
+          .collection('order')
+          .add({
+        'user_email': user.email,
+        'time': DateTime.now(),
+        'items': cartData,
+        'totalAmount': totalAmount,
+        'status': 'Pending',
+      });
+    }
+
     return Scaffold(
-      appBar: MyAppBar(
+      appBar: const MyAppBar(
         title: "Payment Now",
       ),
       body: ListTile(
         onTap: () {
           createOrder();
-          controller.addToOrder(cartData);
+          addToOrder();
           Get.offAll(() => const Home());
         },
         leading: Image.network(

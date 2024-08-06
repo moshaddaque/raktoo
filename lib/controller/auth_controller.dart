@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:raktoo/models/user_model.dart';
 import 'package:raktoo/views/auth/login/login.dart';
 import 'package:raktoo/views/auth/profile_set_up/profile_set_up.dart';
 import 'package:raktoo/views/home/home.dart';
@@ -19,6 +20,17 @@ class AuthController extends GetxController {
   RxString address = RxString('');
   RxString phoneNumber = RxString('');
   RxBool isLoading = RxBool(false);
+
+  var user = UserModel(
+    email: '',
+    fullName: '',
+    address: '',
+    phoneNumber: '',
+    token: '',
+    imageLink: '',
+  ).obs;
+
+  // var user = User().obs;
 
   var selectedImage = File('').obs;
   late String image_url = "";
@@ -114,6 +126,56 @@ class AuthController extends GetxController {
     isLoading.value = false;
     update();
     Get.offAll(() => const Home());
+  }
+
+  //=================== Get Profile data ====================
+
+  getProfileData() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    try {
+      final data = await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(currentUser!.email)
+          .get();
+      if (data.exists) {
+        user.value = UserModel.fromMap(data.data() as Map<String, dynamic>);
+      } else {
+        print("User Not Found");
+      }
+    } catch (e) {
+      print("Error fetching user data: $e");
+    }
+
+    // print(data['full_name']);
+  }
+
+  //=================== Update Profile data ====================
+
+  updateProfileData() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    try {
+      // final data = await FirebaseFirestore.instance
+      //     .collection("User")
+      //     .doc(currentUser!.email)
+      //     .get();
+
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(currentUser!.email)
+          .update({
+        'full_name': user.value.fullName,
+        'address': user.value.address,
+        'phone_number': user.value.phoneNumber,
+      }).then((_) {
+        Get.back();
+        Get.snackbar("Update", "Data updated Successfully");
+
+        isLoading.value = false;
+        update();
+      });
+    } catch (e) {
+      print("Error fetching user data: $e");
+    }
   }
 
 //=================== log in ====================

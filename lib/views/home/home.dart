@@ -9,6 +9,7 @@ import 'package:raktoo/components/product_card.dart';
 import 'package:raktoo/controller/home_controller.dart';
 import 'package:raktoo/utils/app_style.dart';
 import 'package:raktoo/views/product_details/product_details.dart';
+import 'package:raktoo/views/products_page/products.dart';
 import 'package:raktoo/views/search/search_view.dart';
 
 import '../../components/slider_card.dart';
@@ -104,11 +105,16 @@ class Home extends StatelessWidget {
                       "Top Categories",
                       style: AppStyle.h3Text,
                     ),
-                    Text(
-                      "See All",
-                      style: AppStyle.h3Text.copyWith(
-                        color: AppColor.primaryColor,
-                        fontWeight: FontWeight.w600,
+                    InkWell(
+                      onTap: () {
+                        // Get.to(() => const Products());
+                      },
+                      child: Text(
+                        "See All",
+                        style: AppStyle.h3Text.copyWith(
+                          color: AppColor.primaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
@@ -133,7 +139,12 @@ class Home extends StatelessWidget {
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
                             final category = snapshot.data!.docs[index];
-                            return CategoryCard(catImage: category['icon']);
+                            return CategoryCard(
+                              catImage: category['icon'],
+                              onTap: () => Get.to(
+                                () => Products(catId: category['id']),
+                              ),
+                            );
                           },
                         ),
                       );
